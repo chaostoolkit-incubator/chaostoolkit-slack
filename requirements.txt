@@ -1,2 +1,2 @@
-chaostoolkit-lib
+chaostoolkit-lib>=0.15.0
 slackclient
