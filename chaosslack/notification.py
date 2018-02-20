@@ -18,7 +18,10 @@ def notify(settings: Dict[str, Any], event: EventPayload):
     - `"channel"`: the channel where to send this event notification
 
     If one of these two attributes is missing, no notification is sent.
+
     """
+    # This function is ugly.
+
     token = settings.get("token")
     channel = settings.get("channel")
 
@@ -35,31 +38,185 @@ def notify(settings: Dict[str, Any], event: EventPayload):
 
     sc = SlackClient(token)
 
+    phase = event.get("phase")
+
+    color = "#439FE0"
+    icon = "https://avatars1.githubusercontent.com/u/32068152?s=16&v=4"
+
     attachments = []
-    attachments.append({
+    fields = []
+    activities_fields = []
+    steady_states_fields = []
+    rollbacks_fields = []
+
+    main_attachement = {
+        "fields": fields,
+        "color": color,
+        "ts": event.get("ts"),
+        "footer_icon": icon,
+        "footer": "Chaos Toolkit"
+    }
+    attachments.append(main_attachement)
+
+    steady_states_attachment = {
+        "text": "Steady State",
+        "fields": steady_states_fields,
+        "color": color,
+        "ts": event.get("ts"),
+        "footer_icon": icon,
+        "footer": "Chaos Toolkit"
+    }
+
+    activities_attachment = {
+        "text": "Failed Activities",
+        "fields": activities_fields,
+        "color": "danger",
+        "ts": event.get("ts"),
+        "footer_icon": icon,
+        "footer": "Chaos Toolkit"
+    }
+
+    rollbacks_attachment = {
+        "text": "Failed Rollbacks",
+        "fields": rollbacks_fields,
+        "color": "danger",
+        "ts": event.get("ts"),
+        "footer_icon": icon,
+        "footer": "Chaos Toolkit"
+    }
+
+    fields.append({
         "title": "Source",
-        "text": event.get("phase")
+        "value": phase,
+        "short": True
     })
 
-    attachments.append({
+    fields.append({
         "title": "Event",
-        "text": event.get("name")
+        "value": event.get("name"),
+        "short": True
     })
 
     payload = event.get("payload")
-    if payload:
+    if payload and isinstance(payload, dict):
         title = payload.get("title")
         if not title:
             title = payload.get("experiment", {}).get("title")
         if title:
-            attachments.append({
+            fields.append({
                 "title": "Experiment",
-                "text": title
+                "value": title,
+                "short": False
             })
+
+        hypo = payload.get("steady-state-hypothesis")
+        if not hypo:
+            hypo = payload.get("experiment", {}).get("steady-state-hypothesis")
+        title = hypo.get("title") if hypo else "N/A"
+        steady_states_fields.append({
+            "title": "Hypothesis",
+            "value": title,
+            "short": False
+        })
+
+        steady_states = payload.get("steady_states")
+        if steady_states:
+            before = steady_states["before"]
+            met = before["steady_state_met"]
+            msg = "ok" if met else "not met"
+
+            steady_states_fields.append({
+                "title": "Before",
+                "value": msg,
+                "short": False
+            })
+
+            if not met:
+                steady_states_attachment["color"] = "warning"
+                probe = before["probes"][-1]
+                msg = probe.get("output")
+                if not msg and probe.get("exception"):
+                    msg = probe.get("exception")[-1].strip()
+                steady_states_fields.append({
+                    "title": "Tolerance Output",
+                    "value": "```{}```".format(msg),
+                    "short": False
+                })
+
+            after = steady_states.get("after")
+            if after:
+                met = after["steady_state_met"]
+                msg = "ok" if met else "not met"
+
+                steady_states_fields.append({
+                    "title": "After",
+                    "value": msg,
+                    "short": False
+                })
+
+                if not met:
+                    steady_states_attachment["color"] = "danger"
+                    probe = after["probes"][-1]
+                    msg = probe.get("output")
+                    if not msg and probe.get("exception"):
+                        msg = probe.get("exception")[-1].strip()
+                    steady_states_fields.append({
+                        "title": "Tolerance Output",
+                        "value": "```{}```".format(msg),
+                        "short": False
+                    })
+
+        runs = payload.get("run")
+        if runs:
+            for run in runs:
+                if run["status"] == "failed":
+                    msg = run.get("output")
+                    if not msg and run.get("exception"):
+                        msg = run.get("exception")[-1].strip()
+                    activities_fields.append({
+                        "title": run.get("activity").get("name"),
+                        "value": "```{}```".format(msg),
+                        "short": False
+                    })
+
+        rollbacks = payload.get("rollbacks")
+        if rollbacks:
+            for rollback in rollbacks:
+                if rollback.get("status") == "failed":
+                    msg = rollback.get("output")
+                    if not msg and rollback.get("exception"):
+                        msg = rollback.get("exception")[-1].strip()
+                    rollbacks_fields.append({
+                        "title": rollback.get("activity").get("name"),
+                        "value": "```{}```".format(msg),
+                        "short": False
+                    })
+
+    # let's not clutter the view
+    if steady_states_fields:
+        main_attachement.pop("ts", None)
+        main_attachement.pop("footer", None)
+        main_attachement.pop("footer_icon", None)
+        attachments.append(steady_states_attachment)
+
+    if activities_fields:
+        steady_states_attachment.pop("ts", None)
+        steady_states_attachment.pop("footer", None)
+        steady_states_attachment.pop("footer_icon", None)
+        attachments.append(activities_attachment)
+
+    if rollbacks_fields:
+        steady_states_attachment.pop("ts", None)
+        steady_states_attachment.pop("footer", None)
+        steady_states_attachment.pop("footer_icon", None)
+        activities_attachment.pop("ts", None)
+        activities_attachment.pop("footer", None)
+        activities_attachment.pop("footer_icon", None)
+        attachments.append(rollbacks_attachment)
 
     sc.api_call(
         "chat.postMessage",
         channel=channel,
-        text="Chaos Toolkit notification",
+        text="New Chaos Experiment Event",
         attachments=attachments
     )
