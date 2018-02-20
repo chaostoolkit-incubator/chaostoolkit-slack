@@ -1,5 +1,7 @@
 # Chaos Toolkit Extension for Slack
 
+[![Build Status](https://travis-ci.org/chaostoolkit-incubator/chaostoolkit-slack.svg?branch=master)](https://travis-ci.org/chaostoolkit-incubator/chaostoolkit-slack)
+
 This project is an extension for the Chaos Toolkit to target [Slack][slack].
 
 [slack]: https://slack.com/
