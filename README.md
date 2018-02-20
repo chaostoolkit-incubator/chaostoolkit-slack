@@ -17,6 +17,15 @@ environment where [chaostoolkit][] already lives.
 $ pip install -U chaostoolkit-slack
 ```
 
+## Slack Token
+
+You can simply generate a [legacy token][legtok]. But you may also create a
+full [Slack App][slackapp] and generate a [token from it][slacktok].
+
+[legtok]: https://api.slack.com/custom-integrations/legacy-tokens
+[slackapp]: https://api.slack.com/slack-apps
+[slacktok]: https://api.slack.com/docs/token-types
+
 ## Usage
 
 Currently, this extension only provides notification support to send Chaos
