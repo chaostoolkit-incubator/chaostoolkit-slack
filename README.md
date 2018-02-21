@@ -33,8 +33,10 @@ full [Slack App][slackapp] and generate a [token from it][slacktok].
 Currently, this extension only provides notification support to send Chaos
 Toolkit events to Slack channels.
 
-To use this extension, edit your `chaostoolkit` settings by adding the
+To use this extension, edit your [chaostoolkit settings][settings] by adding the
 following payload:
+
+[settings]: http://chaostoolkit.org/reference/usage/settings/
 
 ```yaml
 notifications:
