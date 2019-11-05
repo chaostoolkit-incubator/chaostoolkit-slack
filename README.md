@@ -36,7 +36,7 @@ Toolkit events to Slack channels.
 To use this extension, edit your [chaostoolkit settings][settings] by adding the
 following payload:
 
-[settings]: http://chaostoolkit.org/reference/usage/settings/
+[settings]: https://docs.chaostoolkit.org/reference/usage/cli/#configure-the-chaos-toolkit
 
 ```yaml
 notifications:
