@@ -19,12 +19,19 @@ def notify(settings: Dict[str, Any], event: EventPayload):
     - `"channel"`: the channel where to send this event notification
 
     If one of these two attributes is missing, no notification is sent.
+    
+    The settings can contain:
+    - `"username"` : to set the user name
+    - `"text"` : to set the text of the notification
 
     """
+
     # This function is ugly.
 
     token = settings.get("token")
     channel = settings.get("channel")
+    username = settings.get("username")
+    text = settings.get("text")
 
     if not token:
         logger.debug("Slack notifier requires a token")
@@ -33,6 +40,14 @@ def notify(settings: Dict[str, Any], event: EventPayload):
     if not channel:
         logger.debug("Slack notifier requires a channel")
         return
+    
+    if not username:
+        logger.debug("No username is provided, setting username to Chaos Toolkit")
+        username = "Chaos Toolkit"
+        
+    if not text:
+        logger.debug("No text is provided, setting text to \'New Chaos Experiment Event\'")
+        text = "New Chaos Experiment Event"
 
     token = token.strip()
     channel = "#{c}".format(c=channel.lstrip("#").strip())
@@ -218,7 +233,9 @@ def notify(settings: Dict[str, Any], event: EventPayload):
     result = sc.api_call(
         "chat.postMessage",
         channel=channel,
-        text="New Chaos Experiment Event",
+        text=text,
+        username=username,
+        icon_url=icon,
         attachments=attachments
     )
 

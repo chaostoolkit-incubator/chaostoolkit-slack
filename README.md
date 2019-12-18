@@ -45,6 +45,8 @@ notifications:
     module: chaosslack.notification
     token: xop-1235
     channel: general
+    username: Chaos Toolkit
+    text: Chaos Engineering using Chaos Toolkit
 ```
 
 By default all events will be forwarded to that channel. You may filter only
@@ -58,6 +60,8 @@ notifications:
     module: chaosslack.notification
     token: xop-1235
     channel: general
+    username: Chaos Toolkit
+    text: Chaos Engineering using Chaos Toolkit
     events:
       - run-failed
       - run-started
