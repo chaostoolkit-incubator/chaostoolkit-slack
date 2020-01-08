@@ -11,7 +11,7 @@ from chaosslack import __version__
 sys.path.remove(".")
 
 name = 'chaostoolkit-slack'
-desc = 'Chaos Toolkit Slack Extenion'
+desc = 'Chaos Toolkit Extension for Slack'
 
 with io.open('README.md', encoding='utf-8') as strm:
     long_desc = strm.read()
