@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 import time
-import types
 from unittest.mock import MagicMock, patch
 
 from chaoslib.notification import RunFlowEvent
-import pytest
-import requests
-import requests_mock
+from slack import WebClient
 
 from chaosslack.notification import notify
 
 
-def test_notify():
+@patch("chaosslack.notification.WebClient", autospec=True)
+def test_notify(sc: WebClient):
     payload = {
         "msg": "hello",
         "ts": str(time.time())
@@ -21,23 +19,14 @@ def test_notify():
         "phase": "run",
         "payload": payload
     }
-    with requests_mock.mock() as m:
-        m.post(
-            'https://slack.com/api/chat.postMessage',
-            status_code=200,
-            json={
-                "ok": True,
-                "channel": "C1H9RESGL",
-                "ts": "1503435956.000247"
-            }
-        )
-
-        notify(
-            {
-                "token": "xop-1234",
-                "channel": "#general"
-            },
-            event_payload
-        )
-
-        assert m.called
+    c = MagicMock()
+    sc.return_value = c
+    c.chat_postMessage.return_value = {
+        "data": {
+            "ok": True
+        }
+    }
+    notify({
+        "token": "xyz",
+        "channel": "#general"
+    }, event_payload)

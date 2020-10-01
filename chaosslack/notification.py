@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+import logging
 import json
 from typing import Any, Dict
 
 from chaoslib.types import EventPayload
 from logzero import logger
-from slackclient import SlackClient
+from slack import WebClient
+from slack.errors import SlackApiError
 
 __all__ = ["notify"]
 
@@ -37,7 +39,7 @@ def notify(settings: Dict[str, Any], event: EventPayload):
     token = token.strip()
     channel = "#{c}".format(c=channel.lstrip("#").strip())
 
-    sc = SlackClient(token)
+    sc = WebClient(token=token)
 
     phase = event.get("phase")
 
@@ -215,15 +217,17 @@ def notify(settings: Dict[str, Any], event: EventPayload):
         activities_attachment.pop("footer_icon", None)
         attachments.append(rollbacks_attachment)
 
-    result = sc.api_call(
-        "chat.postMessage",
-        channel=channel,
-        text="New Chaos Experiment Event",
-        attachments=attachments
-    )
-
-    if result.get("ok", False) is False:
-        logger.error("Slack client call failed")
+    try:
+        result = sc.chat_postMessage(
+            channel=channel,
+            text="New Chaos Experiment Event",
+            attachments=attachments
+        )
+    except SlackApiError as x:
+        logger.debug(
+            "Slack client call failed: {}".format(str(x)), exc_info=True)
+        return
 
     logger.debug(
-        "Slack client return call: {}".format(json.dumps(result, indent=2)))
+        "Slack client return call: {}".format(
+            json.dumps(result["data"], indent=2)))
