@@ -43,7 +43,7 @@ notifications:
   -
     type: plugin
     module: chaosslack.notification
-    token: xoxp-xxxxxxxxxxxx
+    token: xoxb-xxxxxxxxxxxx
     channel: general
 ```
 
@@ -56,7 +56,7 @@ notifications:
   -
     type: plugin
     module: chaosslack.notification
-    token: xoxp-xxxxxxxxxxxx
+    token: xoxb-xxxxxxxxxxxx
     channel: general
     events:
       - run-failed
