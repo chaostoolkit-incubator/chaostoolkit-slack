@@ -124,27 +124,28 @@ def notify(settings: Dict[str, Any], event: EventPayload):
 
         steady_states = payload.get("steady_states")
         if steady_states:
-            before = steady_states["before"]
-            met = before["steady_state_met"]
-            msg = "ok" if met else "not met"
+            before = steady_states.get("before")
+            if before:
+                met = before["steady_state_met"]
+                msg = "ok" if met else "not met"
 
-            steady_states_fields.append({
-                "title": "Before",
-                "value": msg,
-                "short": False
-            })
-
-            if not met:
-                steady_states_attachment["color"] = "warning"
-                probe = before["probes"][-1]
-                msg = probe.get("output")
-                if not msg and probe.get("exception"):
-                    msg = probe.get("exception")[-1].strip()
                 steady_states_fields.append({
-                    "title": "Tolerance Output",
-                    "value": "```{}```".format(msg),
+                    "title": "Before",
+                    "value": msg,
                     "short": False
                 })
+
+                if not met:
+                    steady_states_attachment["color"] = "warning"
+                    probe = before["probes"][-1]
+                    msg = probe.get("output")
+                    if not msg and probe.get("exception"):
+                        msg = probe.get("exception")[-1].strip()
+                    steady_states_fields.append({
+                        "title": "Tolerance Output",
+                        "value": "```{}```".format(msg),
+                        "short": False
+                    })
 
             after = steady_states.get("after")
             if after:
