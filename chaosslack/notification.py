@@ -2,6 +2,7 @@
 import logging
 import json
 from typing import Any, Dict
+import warnings
 
 from chaoslib.types import EventPayload
 from logzero import logger
@@ -23,6 +24,10 @@ def notify(settings: Dict[str, Any], event: EventPayload):
     If one of these two attributes is missing, no notification is sent.
 
     """
+    warnings.warn(
+        "Notifications have been deprecated, please switch to using the "
+        "control instead", DeprecationWarning, stacklevel=2)
+
     # This function is ugly.
 
     token = settings.get("token")
