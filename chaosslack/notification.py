@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import logging
 import json
-from typing import Any, Dict
 import warnings
+from typing import Any, Dict
 
 from chaoslib.types import EventPayload
 from logzero import logger
@@ -26,7 +25,10 @@ def notify(settings: Dict[str, Any], event: EventPayload):
     """
     warnings.warn(
         "Notifications have been deprecated, please switch to using the "
-        "control instead", DeprecationWarning, stacklevel=2)
+        "control instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
 
     # This function is ugly.
 
@@ -62,7 +64,7 @@ def notify(settings: Dict[str, Any], event: EventPayload):
         "color": color,
         "ts": event.get("ts"),
         "footer_icon": icon,
-        "footer": "Chaos Toolkit"
+        "footer": "Chaos Toolkit",
     }
     attachments.append(main_attachement)
 
@@ -72,7 +74,7 @@ def notify(settings: Dict[str, Any], event: EventPayload):
         "color": color,
         "ts": event.get("ts"),
         "footer_icon": icon,
-        "footer": "Chaos Toolkit"
+        "footer": "Chaos Toolkit",
     }
 
     activities_attachment = {
@@ -81,7 +83,7 @@ def notify(settings: Dict[str, Any], event: EventPayload):
         "color": "danger",
         "ts": event.get("ts"),
         "footer_icon": icon,
-        "footer": "Chaos Toolkit"
+        "footer": "Chaos Toolkit",
     }
 
     rollbacks_attachment = {
@@ -90,20 +92,12 @@ def notify(settings: Dict[str, Any], event: EventPayload):
         "color": "danger",
         "ts": event.get("ts"),
         "footer_icon": icon,
-        "footer": "Chaos Toolkit"
+        "footer": "Chaos Toolkit",
     }
 
-    fields.append({
-        "title": "Source",
-        "value": phase,
-        "short": True
-    })
+    fields.append({"title": "Source", "value": phase, "short": True})
 
-    fields.append({
-        "title": "Event",
-        "value": event.get("name"),
-        "short": True
-    })
+    fields.append({"title": "Event", "value": event.get("name"), "short": True})
 
     payload = event.get("payload")
     if payload and isinstance(payload, dict):
@@ -111,21 +105,17 @@ def notify(settings: Dict[str, Any], event: EventPayload):
         if not title:
             title = payload.get("experiment", {}).get("title")
         if title:
-            fields.append({
-                "title": "Experiment",
-                "value": title,
-                "short": False
-            })
+            fields.append(
+                {"title": "Experiment", "value": title, "short": False}
+            )
 
         hypo = payload.get("steady-state-hypothesis")
         if not hypo:
             hypo = payload.get("experiment", {}).get("steady-state-hypothesis")
         title = hypo.get("title") if hypo else "N/A"
-        steady_states_fields.append({
-            "title": "Hypothesis",
-            "value": title,
-            "short": False
-        })
+        steady_states_fields.append(
+            {"title": "Hypothesis", "value": title, "short": False}
+        )
 
         steady_states = payload.get("steady_states")
         if steady_states:
@@ -134,11 +124,9 @@ def notify(settings: Dict[str, Any], event: EventPayload):
                 met = before["steady_state_met"]
                 msg = "ok" if met else "not met"
 
-                steady_states_fields.append({
-                    "title": "Before",
-                    "value": msg,
-                    "short": False
-                })
+                steady_states_fields.append(
+                    {"title": "Before", "value": msg, "short": False}
+                )
 
                 if not met:
                     steady_states_attachment["color"] = "warning"
@@ -146,22 +134,22 @@ def notify(settings: Dict[str, Any], event: EventPayload):
                     msg = probe.get("output")
                     if not msg and probe.get("exception"):
                         msg = probe.get("exception")[-1].strip()
-                    steady_states_fields.append({
-                        "title": "Tolerance Output",
-                        "value": "```{}```".format(msg),
-                        "short": False
-                    })
+                    steady_states_fields.append(
+                        {
+                            "title": "Tolerance Output",
+                            "value": "```{}```".format(msg),
+                            "short": False,
+                        }
+                    )
 
             after = steady_states.get("after")
             if after:
                 met = after["steady_state_met"]
                 msg = "ok" if met else "not met"
 
-                steady_states_fields.append({
-                    "title": "After",
-                    "value": msg,
-                    "short": False
-                })
+                steady_states_fields.append(
+                    {"title": "After", "value": msg, "short": False}
+                )
 
                 if not met:
                     steady_states_attachment["color"] = "danger"
@@ -169,11 +157,13 @@ def notify(settings: Dict[str, Any], event: EventPayload):
                     msg = probe.get("output")
                     if not msg and probe.get("exception"):
                         msg = probe.get("exception")[-1].strip()
-                    steady_states_fields.append({
-                        "title": "Tolerance Output",
-                        "value": "```{}```".format(msg),
-                        "short": False
-                    })
+                    steady_states_fields.append(
+                        {
+                            "title": "Tolerance Output",
+                            "value": "```{}```".format(msg),
+                            "short": False,
+                        }
+                    )
 
         runs = payload.get("run")
         if runs:
@@ -182,11 +172,13 @@ def notify(settings: Dict[str, Any], event: EventPayload):
                     msg = run.get("output")
                     if not msg and run.get("exception"):
                         msg = run.get("exception")[-1].strip()
-                    activities_fields.append({
-                        "title": run.get("activity").get("name"),
-                        "value": "```{}```".format(msg),
-                        "short": False
-                    })
+                    activities_fields.append(
+                        {
+                            "title": run.get("activity").get("name"),
+                            "value": "```{}```".format(msg),
+                            "short": False,
+                        }
+                    )
 
         rollbacks = payload.get("rollbacks")
         if rollbacks:
@@ -195,11 +187,13 @@ def notify(settings: Dict[str, Any], event: EventPayload):
                     msg = rollback.get("output")
                     if not msg and rollback.get("exception"):
                         msg = rollback.get("exception")[-1].strip()
-                    rollbacks_fields.append({
-                        "title": rollback.get("activity").get("name"),
-                        "value": "```{}```".format(msg),
-                        "short": False
-                    })
+                    rollbacks_fields.append(
+                        {
+                            "title": rollback.get("activity").get("name"),
+                            "value": "```{}```".format(msg),
+                            "short": False,
+                        }
+                    )
 
     # let's not clutter the view
     if steady_states_fields:
@@ -227,13 +221,16 @@ def notify(settings: Dict[str, Any], event: EventPayload):
         result = sc.chat_postMessage(
             channel=channel,
             text="New Chaos Experiment Event",
-            attachments=attachments
+            attachments=attachments,
         )
     except SlackApiError as x:
         logger.debug(
-            "Slack client call failed: {}".format(str(x)), exc_info=True)
+            "Slack client call failed: {}".format(str(x)), exc_info=True
+        )
         return
 
     logger.debug(
         "Slack client return call: {}".format(
-            json.dumps(result["data"], indent=2)))
+            json.dumps(result["data"], indent=2)
+        )
+    )

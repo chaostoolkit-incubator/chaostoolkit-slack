@@ -1,5 +1,7 @@
+black
 coverage
-pycodestyle
-pytest>=2.8
+flake8
+isort
+pytest>=6.0
 pytest-cov
 pytest-sugar

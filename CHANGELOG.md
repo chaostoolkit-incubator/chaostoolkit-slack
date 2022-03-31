@@ -8,6 +8,11 @@
 
 - Control to replace notifications. Sending better messages to slack.
 
+### Changed
+
+- Major revamped of infrastructure so we now build on GitHub, we lint using
+  `black`, we brought pyproject.toml to the build
+
 ### Fixed
 
 -   Notification not sent when SSH has no before state[#10][10]

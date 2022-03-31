@@ -10,23 +10,13 @@ from chaosslack.notification import notify
 
 @patch("chaosslack.notification.WebClient", autospec=True)
 def test_notify(sc: WebClient):
-    payload = {
-        "msg": "hello",
-        "ts": str(time.time())
-    }
+    payload = {"msg": "hello", "ts": str(time.time())}
     event_payload = {
         "event": str(RunFlowEvent.RunStarted),
         "phase": "run",
-        "payload": payload
+        "payload": payload,
     }
     c = MagicMock()
     sc.return_value = c
-    c.chat_postMessage.return_value = {
-        "data": {
-            "ok": True
-        }
-    }
-    notify({
-        "token": "xyz",
-        "channel": "#general"
-    }, event_payload)
+    c.chat_postMessage.return_value = {"data": {"ok": True}}
+    notify({"token": "xyz", "channel": "#general"}, event_payload)
