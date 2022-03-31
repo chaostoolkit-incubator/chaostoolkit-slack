@@ -4,6 +4,10 @@
 
 [Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.3.0...HEAD
 
+### Added
+
+- Control to replace notifications. Sending better messages to slack.
+
 ### Fixed
 
 -   Notification not sent when SSH has no before state[#10][10]

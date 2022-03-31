@@ -1,3 +1,4 @@
-chaostoolkit-lib~=1.0
-logzero~=1.5
+chaostoolkit-lib
+logzero
 slackclient~=2.9
+slack_sdk
