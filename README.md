@@ -1,6 +1,6 @@
 # Chaos Toolkit Extension for Slack
 
-[![Build Status](https://travis-ci.org/chaostoolkit-incubator/chaostoolkit-slack.svg?branch=master)](https://travis-ci.org/chaostoolkit-incubator/chaostoolkit-slack)
+[![Build](https://github.com/chaostoolkit-incubator/chaostoolkit-slack/actions/workflows/build.yaml/badge.svg)](https://github.com/chaostoolkit-incubator/chaostoolkit-slack/actions/workflows/build.yaml)
 
 This project is an extension for the Chaos Toolkit to target [Slack][slack].
 
@@ -8,7 +8,7 @@ This project is an extension for the Chaos Toolkit to target [Slack][slack].
 
 ## Install
 
-This package requires Python 3.6+
+This package requires Python 3.7+
 
 To be used from your experiment, this package must be installed in the Python
 environment where [chaostoolkit][] already lives.
@@ -21,49 +21,42 @@ $ pip install -U chaostoolkit-slack
 
 ## Slack Token
 
-You can simply generate a [legacy token][legtok]. But you may also create a
-full [Slack App][slackapp] and generate a [token from it][slacktok].
+Please follow the procedure on Slack to create a token suitable for
+API calls made using the Python client. The token should start with `xoxb-`.
 
-[legtok]: https://api.slack.com/custom-integrations/legacy-tokens
-[slackapp]: https://api.slack.com/slack-apps
-[slacktok]: https://api.slack.com/docs/token-types
+The token should have at least the following scopes:
+
+`channels:read`, `chat:write`, `files:write` and `incoming-webhook`
+
+[tokendoc]: https://api.slack.com/authentication/basics
 
 ## Usage
 
-Currently, this extension only provides notification support to send Chaos
+Currently, this extension only provides a control to send Chaos
 Toolkit events to Slack channels.
 
-To use this extension, edit your [chaostoolkit settings][settings] by adding the
-following payload:
+To use this extension, add the following to your experiment (or settings):
 
-[settings]: https://docs.chaostoolkit.org/reference/usage/cli/#configure-the-chaos-toolkit
-
-```yaml
-notifications:
-  -
-    type: plugin
-    module: chaosslack.notification
-    token: xoxb-xxxxxxxxxxxx
-    channel: general
+```json
+"secrets": {
+    "slack": {
+        "token": "xoxb-..."
+    }
+},
+"controls": [
+    {
+        "name": "slack",
+        "provider": {
+            "type": "python",
+            "module": "chaosslack.control",
+            "secrets": ["slack"],
+            "arguments": {
+                "channel": "general"
+            }
+        }
+    }
+]
 ```
-
-By default all events will be forwarded to that channel. You may filter only
-those events you care for:
-
-
-```yaml
-notifications:
-  -
-    type: plugin
-    module: chaosslack.notification
-    token: xoxb-xxxxxxxxxxxx
-    channel: general
-    events:
-      - run-failed
-      - run-started
-```
-
-Only sends those two events.
 
 ## Contribute
 
