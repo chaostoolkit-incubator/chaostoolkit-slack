@@ -19,16 +19,65 @@ environment where [chaostoolkit][] already lives.
 $ pip install -U chaostoolkit-slack
 ```
 
-## Slack Token
+### Slack App
+
+To use this extension, you need to create a Slack app in your workspace.
+Please follow the Slack documentation to create a basic app:
+
+https://api.slack.com/apps?new_app=1
+https://api.slack.com/tutorials
+
+You can start from this manifest if you want:
+
+```yaml
+display_information:
+  name: Chaos Toolkit events
+  long_description: Get live feedback information of all your Chaos Engineering
+    experiments executed from Chaos Toolkit. See which experiments deviated and
+    investigate their logs directly from a Slack thread.
+  description: Chaos Engineering experiments live events from Chaos Toolkit.
+  background_color: "#ffffff"
+settings:
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  is_hosted: false
+  token_rotation_enabled: false
+features:
+  bot_user:
+    display_name: chaostoolkit
+oauth_config:
+  scopes:
+    bot:
+      - channels:read
+      - chat:write
+      - files:write
+```
+
+Once your application is created, you may want to set the Chaos Toolkit
+[logo][logo] to clarify to your users where these messages come from.
+
+[logo]: https://chaostoolkit.org/resources/logos/
+
+### Slack Token
 
 Please follow the procedure on Slack to create a token suitable for
 API calls made using the Python client. The token should start with `xoxb-`.
+You can find the token in your app settings under the `OAuth & Permissions`
+page.
 
 The token should have at least the following scopes:
 
-`channels:read`, `chat:write`, `files:write` and `incoming-webhook`
+`channels:read`, `chat:write` and `files:write`
 
 [tokendoc]: https://api.slack.com/authentication/basics
+
+### Install your Slack app
+
+Once created, you need to install the app in your workspace and invite it in
+any channel you wish to send events to. This channel will also have to be part
+specified as a controls argument (see below).
+
+Now you should be good to go!
 
 ## Usage
 
