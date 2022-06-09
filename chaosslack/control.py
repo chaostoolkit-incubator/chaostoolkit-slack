@@ -305,7 +305,6 @@ def send(
             fallback=message,
             text=message,
             thread_ts=current_msg.get("ts"),
-            text=message,
         )
     else:
         r = client.chat_update(
