@@ -283,6 +283,7 @@ def send(
         current_msg = r = client.chat_postMessage(
             channel=channel,
             fallback=message,
+            text=message,
             attachments=attachments(
                 state,
                 message,
@@ -302,6 +303,7 @@ def send(
         r = client.chat_postMessage(
             channel=channel,
             fallback=message,
+            text=message,
             thread_ts=current_msg.get("ts"),
             text=message,
         )
@@ -309,6 +311,7 @@ def send(
         r = client.chat_update(
             channel=current_msg.get("channel"),
             ts=current_msg.get("ts"),
+            text=message,
             attachments=attachments(state, message, experiment),
             reply_broadcast=False,
         )

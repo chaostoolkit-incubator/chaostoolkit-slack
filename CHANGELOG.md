@@ -4,6 +4,10 @@
 
 [Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.4.1...HEAD
 
+### Added
+
+- Add text to messages as per Slack API
+
 ## [0.4.1][]
 
 [0.4.1]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.4.0...0.4.1
