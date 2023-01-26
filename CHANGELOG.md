@@ -2,7 +2,11 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.4.2...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.0...HEAD
+
+## [0.5.0][]
+
+[0.5.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.4.2...0.5.0
 
 ### Changed
 
