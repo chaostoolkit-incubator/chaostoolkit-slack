@@ -4,6 +4,11 @@
 
 [Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.4.2...HEAD
 
+### Changed
+
+- Allowing the channel name to be passed as an environment variable: `SLACK_CHANNEL`
+  rather than an argument of the control
+
 ## [0.4.2][]
 
 [0.4.2]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.4.1...0.4.2

@@ -1,8 +1,10 @@
 import json
+import os
 import platform
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import yaml
+from chaoslib.exceptions import InvalidActivity
 from chaoslib.types import (
     Activity,
     Configuration,
@@ -34,7 +36,7 @@ def after_loading_experiment_control(
     state: Experiment,
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     send("Experiment loaded", channel, configuration, secrets)
 
@@ -43,7 +45,7 @@ def before_experiment_control(
     context: Experiment,
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     send(
         "Experiment is starting",
@@ -61,7 +63,7 @@ def after_experiment_control(
     state: Journal,
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     send(
         "Experiment is finished",
@@ -91,7 +93,7 @@ def before_hypothesis_control(
     experiment: Experiment,
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     send(
         "Steady state hypothesis is being evaluated",
@@ -110,7 +112,7 @@ def after_hypothesis_control(
     experiment: Experiment,
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     phrase = "and did not deviate"
     if state["steady_state_met"] is False:
@@ -131,7 +133,7 @@ def before_method_control(
     context: Experiment,
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     send(
         "Method is starting",
@@ -149,7 +151,7 @@ def after_method_control(
     state: List[Run],
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     send(
         "Method is finished",
@@ -166,7 +168,7 @@ def before_rollback_control(
     context: Experiment,
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     send(
         "Rollback is starting",
@@ -184,7 +186,7 @@ def after_rollback_control(
     state: List[Run],
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     send(
         "Rollback is finished",
@@ -202,7 +204,7 @@ def before_activity_control(
     experiment: Experiment,
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
     send(
         f"Activity `{context['name']}` is starting",
@@ -221,7 +223,7 @@ def after_activity_control(
     experiment: Experiment,
     configuration: Configuration,
     secrets: Secrets,
-    channel: str,
+    channel: Optional[str] = None,
 ) -> None:
 
     send(
@@ -259,7 +261,9 @@ def get_state(journal: Journal = None) -> str:
 
 
 def get_client(secrets: Secrets) -> WebClient:
-    slack_token = secrets.get("slack", {}).get("token")
+    slack_token = secrets.get("slack", {}).get(
+        "token", os.getenv("SLACK_BOT_TOKEN")
+    )
     client = WebClient(token=slack_token)
     return client
 
@@ -268,7 +272,7 @@ def send(
     message: str,
     experiment: Experiment,
     state: str,
-    channel: str,
+    channel: Optional[str],
     in_thread: bool,
     thread_data: Any = None,
     thread_text: str = None,
@@ -278,6 +282,12 @@ def send(
     global client, current_msg
     if not client:
         client = get_client(secrets)
+
+    if not channel:
+        channel = os.getenv("SLACK_CHANNEL")
+
+    if not channel:
+        raise InvalidActivity("missing slack channel name")
 
     if not current_msg:
         current_msg = r = client.chat_postMessage(
