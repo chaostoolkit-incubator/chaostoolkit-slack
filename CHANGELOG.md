@@ -2,7 +2,13 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.3...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.4...HEAD
+
+## [0.5.4][]
+
+[0.5.4]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.3...0.5.4
+
+- Add missing context
 
 ## [0.5.3][]
 
