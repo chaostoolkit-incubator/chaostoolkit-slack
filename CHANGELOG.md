@@ -2,7 +2,13 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.1...HEAD
+
+## [0.5.1][]
+
+[0.5.1]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.0...0.5.1
+
+- Fix call from `after_loading_experiment_control`
 
 ## [0.5.0][]
 

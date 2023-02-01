@@ -38,7 +38,14 @@ def after_loading_experiment_control(
     secrets: Secrets,
     channel: Optional[str] = None,
 ) -> None:
-    send("Experiment loaded", channel, configuration, secrets)
+    send(
+        "Experiment loaded",
+        channel,
+        configuration,
+        secrets,
+        in_thread=True,
+        thread_data=None,
+    )
 
 
 def before_experiment_control(
@@ -225,7 +232,6 @@ def after_activity_control(
     secrets: Secrets,
     channel: Optional[str] = None,
 ) -> None:
-
     send(
         f"Activity `{context['name']}` "
         f"finished with status `{state['status']}`",
