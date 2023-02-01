@@ -2,7 +2,13 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.1...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.2...HEAD
+
+## [0.5.1][]
+
+[0.5.1]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.1...0.5.2
+
+- Fix the fact secrets may not be set
 
 ## [0.5.1][]
 

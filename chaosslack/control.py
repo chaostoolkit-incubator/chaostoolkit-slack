@@ -267,6 +267,7 @@ def get_state(journal: Journal = None) -> str:
 
 
 def get_client(secrets: Secrets) -> WebClient:
+    secrets = secrets or {}
     slack_token = secrets.get("slack", {}).get(
         "token", os.getenv("SLACK_BOT_TOKEN")
     )
