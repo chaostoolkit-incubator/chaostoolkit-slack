@@ -2,11 +2,17 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.2...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.3...HEAD
 
-## [0.5.1][]
+## [0.5.3][]
 
-[0.5.1]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.1...0.5.2
+[0.5.3]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.2...0.5.3
+
+- Handle default case
+
+## [0.5.2][]
+
+[0.5.2]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.1...0.5.2
 
 - Fix the fact secrets may not be set
 

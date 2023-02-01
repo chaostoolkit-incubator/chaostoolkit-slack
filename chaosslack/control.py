@@ -349,6 +349,8 @@ def attachments(
         color = "#FF8E00"
     elif state == "Deviated":
         color = "#FF1700"
+    else:
+        color = "#000000"
 
     payload = [
         {
