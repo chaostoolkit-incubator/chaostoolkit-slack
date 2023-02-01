@@ -41,6 +41,7 @@ def after_loading_experiment_control(
     send(
         "Experiment loaded",
         context,
+        get_state(),
         channel,
         configuration,
         secrets,

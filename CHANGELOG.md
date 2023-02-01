@@ -2,7 +2,13 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.4...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.5...HEAD
+
+## [0.5.5][]
+
+[0.5.5]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.4...0.5.5
+
+- Fix signature
 
 ## [0.5.4][]
 
