@@ -43,8 +43,8 @@ def after_loading_experiment_control(
         context,
         get_state(),
         channel,
-        configuration,
-        secrets,
+        configuration=configuration,
+        secrets=secrets,
         in_thread=True,
         thread_data=None,
     )
