@@ -40,7 +40,7 @@ def after_loading_experiment_control(
 ) -> None:
     send(
         "Experiment loaded",
-        context,
+        state,
         get_state(),
         channel,
         configuration=configuration,
