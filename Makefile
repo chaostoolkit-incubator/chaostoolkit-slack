@@ -10,7 +10,7 @@ install-dev: install
 
 .PHONY: lint
 lint:
-	flake8  chaosslack/ tests/
+	ruff chaosslack/ tests/
 	isort --check-only --profile black  chaosslack/ tests/
 	black --check --diff --line-length=80 chaosslack/ tests/
 
@@ -18,6 +18,7 @@ lint:
 format:
 	isort --profile black  chaosslack/ tests/
 	black --line-length=80 chaosslack/ tests/
+	ruff chaosslack --fix
 
 .PHONY: tests
 tests:

@@ -4,6 +4,14 @@
 
 [Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.7...HEAD
 
+### Added
+
+- `get_channel_history` probe
+
+### Changed
+
+- Switched from flake8 to ruff for linting
+
 ## [0.5.7][]
 
 [0.5.7]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.5.6...0.5.7
