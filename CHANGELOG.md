@@ -2,7 +2,16 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.6.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.7.0...HEAD
+
+## [0.7.0][]
+
+[0.7.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.6.0...0.7.0
+
+### Changed
+
+- Switched to `files_upload_v2` to upload artefacts as per warning from slack
+  sdk
 
 ## [0.6.0][]
 
