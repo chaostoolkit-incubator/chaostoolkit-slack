@@ -1,7 +1,6 @@
 import json
 import os
 import platform
-from secrets import token_hex
 from typing import Any, Dict, List, Optional
 
 import yaml
@@ -311,14 +310,15 @@ def send(
             ),
         )
     elif in_thread and thread_data:
+        state_content = yaml.safe_dump(thread_data or {}, indent=2)
         r = client.files_upload_v2(
-            filename=f"{token_hex(8)}.yaml",
-            channels=channel,
+            channel=current_msg.get("channel"),
             thread_ts=current_msg.get("ts"),
             initial_comment=message,
-            content=yaml.safe_dump(thread_data or {}, indent=2),
+            snippet_type="yaml",
+            content=state_content,
+            length=len(state_content),
             title="state.yaml",
-            filetype="yaml",
         )
     elif in_thread:
         r = client.chat_postMessage(
