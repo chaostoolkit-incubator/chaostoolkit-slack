@@ -12,7 +12,7 @@ from logzero import logger
 from slack_sdk import WebClient
 
 __all__ = ["get_client", "get_channel_id", "discover"]
-__version__ = "0.7.0"
+__version__ = "0.8.0"
 
 
 def get_client(secrets: Secrets) -> WebClient:
