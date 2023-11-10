@@ -56,12 +56,14 @@ def before_experiment_control(
     secrets: Secrets,
     channel: Optional[str] = None,
 ) -> None:
+    extra = configuration.get("slack_extra")
     send(
         "Experiment is starting",
         context,
         get_state(),
         channel,
         in_thread=False,
+        extra=extra,
         configuration=configuration,
         secrets=secrets,
     )
@@ -285,6 +287,7 @@ def send(
     in_thread: bool,
     thread_data: Any = None,
     thread_text: str = None,
+    extra: Optional[List[str]] = None,
     configuration: Configuration = None,
     secrets: Secrets = None,
 ) -> None:
@@ -303,6 +306,7 @@ def send(
             channel=channel,
             fallback=message,
             text=message,
+            extra=extra,
             attachments=attachments(
                 state,
                 message,
@@ -341,7 +345,10 @@ def send(
 
 
 def attachments(
-    state: str, fallback: str, experiment: Experiment
+    state: str,
+    fallback: str,
+    experiment: Experiment,
+    extra: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     if state == "Running":
         color = "#222831"
@@ -381,5 +388,11 @@ def attachments(
             ],
         }
     ]
+
+    if extra:
+        for x in extra:
+            payload[0]["blocks"].append(
+                {"type": "section", "text": {"type": "mrkdwn", "text": x}}
+            )
 
     return payload

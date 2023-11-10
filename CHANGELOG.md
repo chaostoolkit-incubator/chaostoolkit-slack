@@ -2,7 +2,17 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.8.0...HEAD
+
+## [0.8.0][]
+
+[0.8.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.7.0...0.8.0
+
+### Added
+
+- You can now pass `slack_extra` as a list of strings that will be appended
+  to the root message of the slack conversation. This must be set in the
+  `configuration` of the experiment and respect the markdown that Slack supports
 
 ## [0.7.0][]
 
