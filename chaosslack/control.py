@@ -56,24 +56,15 @@ def before_experiment_control(
     secrets: Secrets,
     channel: Optional[str] = None,
 ) -> None:
-    extra = configuration.get("slack_extra")
     send(
         "Experiment is starting",
         context,
         get_state(),
         channel,
         in_thread=False,
-        extra=extra,
         configuration=configuration,
         secrets=secrets,
     )
-
-    if current_msg:
-        c = context.setdefault("configuration", {})
-        c["slack_thread"] = {
-            "channel": current_msg.get("channel"),
-            "ts": current_msg.get("ts"),
-        }
 
 
 def after_experiment_control(
@@ -294,7 +285,6 @@ def send(
     in_thread: bool,
     thread_data: Any = None,
     thread_text: str = None,
-    extra: Optional[List[str]] = None,
     configuration: Configuration = None,
     secrets: Secrets = None,
 ) -> None:
@@ -308,16 +298,18 @@ def send(
     if not channel:
         raise InvalidActivity("missing slack channel name")
 
+    extra = (configuration or {}).get("slack_extra")
+
     if not current_msg:
         current_msg = r = client.chat_postMessage(
             channel=channel,
             fallback=message,
             text=message,
-            extra=extra,
             attachments=attachments(
                 state,
                 message,
                 experiment,
+                extra,
             ),
         )
     elif in_thread and thread_data:
@@ -343,7 +335,7 @@ def send(
             channel=current_msg.get("channel"),
             ts=current_msg.get("ts"),
             text=message,
-            attachments=attachments(state, message, experiment),
+            attachments=attachments(state, message, experiment, extra),
             reply_broadcast=False,
         )
 

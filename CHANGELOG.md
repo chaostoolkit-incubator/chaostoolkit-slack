@@ -2,7 +2,16 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.9.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.10.0...HEAD
+
+## [0.10.0][]
+
+[0.10.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-slack/compare/0.9.0...0.10.0
+
+### Changed
+
+- Undid last change as i's not praticale to update a slack message without its
+  entire context. Slack API reflects the odd design of Slack.
 
 ## [0.9.0][]
 
