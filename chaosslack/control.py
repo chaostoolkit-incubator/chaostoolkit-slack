@@ -68,6 +68,13 @@ def before_experiment_control(
         secrets=secrets,
     )
 
+    if current_msg:
+        c = context.setdefault("configuration", {})
+        c["slack_thread"] = {
+            "channel": current_msg.get("channel"),
+            "ts": current_msg.get("ts"),
+        }
+
 
 def after_experiment_control(
     context: Experiment,
